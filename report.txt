@@ -1,0 +1,36 @@
+David Zhao
+
+~~I used Jason Booth's testing script~~
+
+For the lots of small numbers test I tested factorizing from 1 to 1600000. Let this be test1.
+For the handful of big numbers test I tested  starting at 1000000000000000 and factorizing 150 numbers. Let this be test2.
+
+I ran each test 5 times and took the median.
+
+Running times:
+=====================================================================
+| test1, 1 | test1, 4 | test1, 16 | test2, 1 | test2, 4 | test2, 16 |
+=====================================================================
+| 5.766    | 3.867    | 3.300     | 3.101    | 1.677    | 1.013     |
+=====================================================================
+
+The units are in seconds.
+
+Parallel Speedup:
+===============================================
+| test1, 4 | test1, 16 | test2, 4 | test2, 16 |
+===============================================
+| 1.57     | 1.74      | 1.85     | 3.06      |
+===============================================
+
+The units represent how many times faster this execution was compared to its corresponding sequential execution.
+
+
+
+The results are somewhat expected and somewhat interesting. The expected part is that the threaded versions are faster. The interesting part is that adding another thread will not double the speed of the script. I see two reasons why this is the case.
+
+The first reason is that the speed of the script isn't solely due to the number of worker threads because there is only one thread that could act as a bottleneck. That thread being the main thread that inserts and removes jobs from the input and output queue. This bottleneck is noticable in the results because the threaded versions showed a greater parallel speedup when there are fewer numbers but the numbers are harder to factorize. This is because the larger the number the more time each worker thread spends on factorizing and thus the main thread doesn't become as limiting for the performance. 
+
+The second concern could be that the cores that run each thread could be distributed. Thus latency issues would also slow down the speed of the script. While I'm not sure if the cores that run this process are distributed, if they were the latency could become an issue.
+
+Overall threading improved the execution time of this script but the results show that the parallel speedup isn't proportional to the number of worker threads.
