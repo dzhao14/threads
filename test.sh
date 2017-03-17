@@ -2,8 +2,8 @@
 
 t1_start=1
 t1_count=1600000
-t2_start=1000000000
-t2_count=15
+t2_start=1000000000000000
+t2_count=150
 
 for ii in 0 1 2
 do
@@ -16,7 +16,7 @@ for jj in 0 1 2
 do
     printf "\n"
     printf "test 2. $(($jj+1)), threads: $((4**$jj)), start: $t2_start, count: $t2_count"
-    time (./main $(($jj)) $t2_start $t2_count 1>> results.txt 2>> errors.txt)
+    time (./main $((2**$jj)) $t2_start $t2_count 1>> results.txt 2>> errors.txt)
 done
 
 if [ -s ./errors.txt ]; then
