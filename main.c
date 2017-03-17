@@ -59,6 +59,8 @@ main(int argc, char* argv[])
         while (!(job = get_result())) {
 			pthread_cond_wait(&oqueue_cond, &oqueue_mutex);
 		}
+		
+		pthread_mutex_unlock(&oqueue_mutex);
 
         print_int128(job->number);
         printf(": ");
@@ -80,7 +82,6 @@ main(int argc, char* argv[])
         }
 
         free_job(job);
-		pthread_mutex_unlock(&oqueue_mutex);
     }
 
 	DONE = 1;
