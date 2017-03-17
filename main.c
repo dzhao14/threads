@@ -14,7 +14,13 @@ extern pthread_cond_t oqueue_cond;
 
 void*
 factorize_work() {
-	while (DONE == 0) {
+	while (1 == 1) {
+		pthread_mutex_lock(&iqueue);
+		int d = DONE;
+		pthread_mutex_unlock(&iqueue);
+		if (d == 1) {
+			break;
+		}
 		run_jobs();
 	}
 	return 0;
@@ -83,8 +89,11 @@ main(int argc, char* argv[])
 
         free_job(job);
     }
-
+	
+	pthread_mutex_lock(&iqueue_mutex);
 	DONE = 1;
+	pthread_mutex_unlock(&iqueue_mutex);
+
     printf("Factored %ld / %ld numbers.\n", oks, count);
 
     factor_cleanup(threads, workers);
