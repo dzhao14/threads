@@ -17,18 +17,20 @@ factorize_work() {
 	while (DONE == 0) {
 		run_jobs();
 	}
+	return 0;
 }
 
 int
 main(int argc, char* argv[])
 {
-	printf("main: %d\n", (int)pthread_self());
     if (argc != 4) {
         printf("Usage:\n");
         printf("  ./main threads start count\n");
         return 1;
     }
-
+		
+    factor_init();
+	
     int threads = atoi(argv[1]);
 	pthread_t workers[threads];
 	for (int i = 0; i < threads; i++) {
@@ -39,8 +41,6 @@ main(int argc, char* argv[])
     int128_t start = atoh(argv[2]);
     int64_t  count = atol(argv[3]);
 
-    // FIXME: Maybe we're spawning threads in init?
-    factor_init(); //creates two queues.
 	//fill up iqueue
     for (int64_t ii = 0; ii < count; ++ii) {
         factor_job* job = make_job(start + ii);

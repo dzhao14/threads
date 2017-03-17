@@ -30,7 +30,9 @@ void
 factor_cleanup(int threads, pthread_t* workers)
 {
 	for (int i = 0; i < threads; i++) {
-		printf("gonna hang?\n");
+		pthread_cond_signal(&iqueue_cond);
+	}
+	for (int i = 0; i < threads; i++) {
 		int rv = pthread_join(workers[i], 0);
 		assert(rv == 0);
 	}
@@ -113,7 +115,6 @@ run_jobs()
     factor_job* job;
 	pthread_mutex_lock(&iqueue_mutex);
 	while (DONE == 0 && !(job = queue_get(iqueue))) {
-		printf("hang\n");
 		pthread_cond_wait(&iqueue_cond, &iqueue_mutex);
 	}
 	pthread_mutex_unlock(&iqueue_mutex);
