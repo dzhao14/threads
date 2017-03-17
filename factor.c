@@ -117,7 +117,10 @@ run_jobs()
 	while (DONE == 0 && !(job = queue_get(iqueue))) {
 		pthread_cond_wait(&iqueue_cond, &iqueue_mutex);
 	}
-	if (DONE == 1) { return;}
+	if (DONE == 1) { 
+		pthread_mutex_unlock(&iqueue_mutex);
+		return;
+	}
 	pthread_mutex_unlock(&iqueue_mutex);
 	
 	assert(job != 0);

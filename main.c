@@ -15,9 +15,9 @@ extern pthread_cond_t oqueue_cond;
 void*
 factorize_work() {
 	while (1 == 1) {
-		pthread_mutex_lock(&iqueue);
+		pthread_mutex_lock(&iqueue_mutex);
 		int d = DONE;
-		pthread_mutex_unlock(&iqueue);
+		pthread_mutex_unlock(&iqueue_mutex);
 		if (d == 1) {
 			break;
 		}
