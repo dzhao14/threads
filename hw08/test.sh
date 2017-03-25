@@ -1,7 +1,7 @@
 #!/bin/bash
 
-t1_start=4611686018427387904
-t1_count=50
+t1_start=1
+t1_count=1600000
 t2_start=1000000000000000
 t2_count=150
 
